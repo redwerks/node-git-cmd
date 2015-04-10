@@ -1,0 +1,94 @@
+"use strict";
+var chai = require('chai'),
+	expect = chai.expect,
+	suite = require('./support/suite'),
+	path = require('path'),
+	fs = require('fs'),
+	execFile = require('child-process-promise').execFile,
+	es = require('event-stream'),
+	{LineStream} = require('byline'),
+	git = require('../');
+chai.use(require('chai-as-promised'));
+
+describe('git()', function() {
+	describe('.ok()', function() {
+		function hasRef(ref) {
+			return git(['rev-parse', ref], {cwd: suite.cwd}).ok();
+		}
+
+		it('should eventually return true when successful', function() {
+			return expect(hasRef('master')).to.eventually.equal(true);
+		});
+
+		it('should eventually return false when failed', function() {
+			return expect(hasRef('null')).to.eventually.equal(false);
+		});
+	});
+
+	describe('.pass()', function() {
+		it('shouldpass  output to stdout and stdout', function() {
+			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'status'])
+				.then(function(result) {
+					expect(result.stdout).to.equal('On branch master\nnothing to commit, working directory clean\n');
+					expect(result.stderr).to.equal('');
+				});
+		});
+	});
+
+	describe('.capture()', function() {
+		it("should capture the command's output to a string when passed {encoding: 'utf8'}", function() {
+			return expect(git(['cat-file', 'blob', 'HEAD:README.md'], {cwd: suite.cwd}).capture({encoding: 'utf8'}))
+				.to.eventually.equal(fs.readFileSync(path.join(suite.cwd, 'README.md'), 'utf8'));
+		});
+	});
+
+	describe('.oneline()', function() {
+		it("should capture the command's output without a newline", function() {
+			return expect(git(['show-ref', '--hash', 'master'], {cwd: suite.cwd}).oneline())
+				.to.eventually.match(/^[0-9a-f]{40}$/);
+		});
+	});
+
+	describe('.pipe(...).oneline()', function() {
+		function HEAD() {
+			return git(['symbolic-ref', 'HEAD'], {cwd: suite.cwd})
+				.pipe(es.replace('master', 'branch'))
+				.oneline({encoding: 'utf8'});
+		}
+
+		it("should capture output modified by the through stream", function() {
+			return expect(HEAD())
+				.to.eventually.equal('refs/heads/branch');
+		});
+	});
+
+	describe('.pipe(...).array()', function() {
+		function tags() {
+			return git(['tag'], {cwd: suite.cwd})
+				.pipe(new LineStream())
+				.array();
+		}
+		it("should capture the command's output to an array", function() {
+			return expect(tags())
+				.to.eventually.eql(['v0.0.1']);
+		});
+	});
+
+	describe('.pass({prefix: "Foo: "})', function() {
+		it('should prefix output', function() {
+			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'symbolicRefHEAD'])
+				.then(function(result) {
+					expect(result.stdout).to.equal('Foo: refs/heads/master\n');
+					expect(result.stderr).to.equal('');
+				});
+		});
+
+		it('should prefix every line of output', function() {
+			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'prefixedStatus'])
+				.then(function(result) {
+					expect(result.stdout).to.equal('Foo: On branch master\nFoo: nothing to commit, working directory clean\n');
+					expect(result.stderr).to.equal('');
+				});
+		});
+	});
+});

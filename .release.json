@@ -1,0 +1,4 @@
+{
+    "pkgFiles": ["package.json"],
+    "tagName": "v%s"
+}
