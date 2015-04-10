@@ -27,7 +27,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:mocha-traceur --reporter spec"
+    "test": "mocha"
   },
   "dependencies": {
     "bluebird": "^2.9.24",
