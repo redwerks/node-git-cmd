@@ -29,6 +29,8 @@ describe('git()', function() {
 		it('shouldpass  output to stdout and stdout', function() {
 			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'status'])
 				.then(function(result) {
+					// Ignore minor differences in status output between different git versions
+					result.stdout = result.stdout.replace('# ', '')
 					expect(result.stdout).to.equal('On branch master\nnothing to commit, working directory clean\n');
 					expect(result.stderr).to.equal('');
 				});
@@ -78,6 +80,8 @@ describe('git()', function() {
 		it('should prefix output', function() {
 			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'symbolicRefHEAD'])
 				.then(function(result) {
+					// Ignore minor differences in status output between different git versions
+					result.stdout = result.stdout.replace('# ', '')
 					expect(result.stdout).to.equal('Foo: refs/heads/master\n');
 					expect(result.stderr).to.equal('');
 				});
@@ -86,6 +90,8 @@ describe('git()', function() {
 		it('should prefix every line of output', function() {
 			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'prefixedStatus'])
 				.then(function(result) {
+					// Ignore minor differences in status output between different git versions
+					result.stdout = result.stdout.replace('# ', '')
 					expect(result.stdout).to.equal('Foo: On branch master\nFoo: nothing to commit, working directory clean\n');
 					expect(result.stderr).to.equal('');
 				});
