@@ -1,3 +1,8 @@
+[![npm version](https://badge.fury.io/js/git-cmd.svg)](http://badge.fury.io/js/git-cmd)
+[![Build Status](https://travis-ci.org/redwerks/node-git-cmd.svg?branch=master)](https://travis-ci.org/redwerks/node-git-cmd)
+[![Dependency Status](https://david-dm.org/redwerks/node-git-cmd.svg)](https://david-dm.org/redwerks/node-git-cmd)
+[![devDependency Status](https://david-dm.org/redwerks/node-git-cmd/dev-status.svg)](https://david-dm.org/redwerks/node-git-cmd#info=devDependencies)
+
 git-cmd
 =======
 git-cmd is a node.js command builder meant to be used to build your own functions to interact with git repositories through the `git` command.
