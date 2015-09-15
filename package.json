@@ -1,6 +1,6 @@
 {
   "name": "git-cmd",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A command builder to build functions that will run git commands and extract output from them in a variety of ways.",
   "keywords": [
     "git"
