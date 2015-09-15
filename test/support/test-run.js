@@ -14,7 +14,21 @@ var suite = require('./suite'),
 		},
 		symbolicRefHEAD: function() {
 			git(['symbolic-ref', 'HEAD'], {cwd: suite.cwd})
-				.pass({prefix: "Foo: "})
+				.pass({prefix: "Foo: "});
+		},
+		symbolicRefNULL: function() {
+			git(['symbolic-ref', 'NULL'], {cwd: suite.cwd})
+				.oneline({prefix: "Foo: "})
+				.catch(function() {
+					console.error('thrown');
+				});
+		},
+		symbolicRefNULLSilent: function() {
+			git(['symbolic-ref', 'NULL'], {cwd: suite.cwd})
+				.oneline({silenceErrors: true})
+				.catch(function() {
+					console.error('thrown');
+				});
 		}
 	};
 

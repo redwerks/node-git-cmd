@@ -90,6 +90,7 @@ This result is useful when running long running commands like `fetch` and `clone
 
 * **prefix** (string) [default=`""`] prefix for every line piped to stdout and stderr.
   * If you are executing multiple git commands in parallel this can identify what output is from what command.
+* **silenceErrors** (boolean) [default=`false`] don't pass through stderr output.
 
 ##### Example
 
@@ -114,6 +115,7 @@ This is useful for any command you are capturing binary or multi-line data. Espe
 
 * **prefix** (string) [default=`""`] prefix for every line piped to stderr.
 * **encoding** (string|`undefined`|`false`) [default=`undefined`] the character encoding of the data to decode.
+* **silenceErrors** (boolean) [default=`false`] don't pass through stderr output.
 
 ##### Example
 
@@ -139,6 +141,7 @@ This is useful for any command that simply returns a simple one-line string.
 ##### Options
 
 * **prefix** (string) [default=`""`] prefix for every line piped to stderr.
+* **silenceErrors** (boolean) [default=`false`] don't pass through stderr output.
 
 ##### Example
 
@@ -164,6 +167,7 @@ This is useful when you want to return a list of objects processed through trans
 ##### Options
 
 * **prefix** (string) [default=`""`] prefix for every line piped to stderr.
+* **silenceErrors** (boolean) [default=`false`] don't pass through stderr output.
 
 ##### Example
 

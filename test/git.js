@@ -96,11 +96,34 @@ describe('git()', function() {
 					expect(result.stderr).to.equal('');
 				});
 		});
+
+		it('should prefix errors', function() {
+			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'symbolicRefNULL'])
+				.then(function(result) {
+					// Ignore minor differences in status output between different git versions
+					result.stdout = result.stdout.replace('# ', '')
+					expect(result.stdout).to.equal('');
+					expect(result.stderr).to.equal('Foo: fatal: ref NULL is not a symbolic ref\nthrown\n');
+				});
+		});
+	});
+
+	describe('.oneline({silenceErrors: true})', function() {
+		it('should not pass through errors', function() {
+			return execFile('node', [path.join(__dirname, 'support', 'test-run.js'), 'symbolicRefNULLSilent'])
+				.then(function(result) {
+					// Ignore minor differences in status output between different git versions
+					result.stdout = result.stdout.replace('# ', '')
+					expect(result.stdout).to.equal('');
+					expect(result.stderr).to.equal('thrown\n');
+				});
+		});
 	});
 
 	describe('{GIT_DIR: "/"}', function() {
 		it('should change the GIT_DIR to the wrong path', function() {
-			return expect(git(['show-ref', '--hash', 'master'], {cwd: suite.cwd, GIT_DIR: '/'}).oneline())
+			return expect(
+				git(['show-ref', '--hash', 'master'], {cwd: suite.cwd, GIT_DIR: '/'}).oneline({silenceErrors: true}))
 				.to.eventually.be.rejected;
 		});
 	});
