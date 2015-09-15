@@ -97,4 +97,11 @@ describe('git()', function() {
 				});
 		});
 	});
+
+	describe('{GIT_DIR: "/"}', function() {
+		it('should change the GIT_DIR to the wrong path', function() {
+			return expect(git(['show-ref', '--hash', 'master'], {cwd: suite.cwd, GIT_DIR: '/'}).oneline())
+				.to.eventually.be.rejected;
+		});
+	});
 });

@@ -28,6 +28,7 @@ Construct a git command. The command is not executed at this point.
 * **options** (options):
   * **git** (string) [default=`"git"`] the path to the `git` executable.
   * **cwd** (string) [default=`process.cwd`] the git directory.
+  * **GIT_DIR** (string) the GIT_DIR environment variable.
 
 ### **cmd** chained methods
 
