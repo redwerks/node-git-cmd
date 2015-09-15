@@ -128,3 +128,26 @@ describe('git()', function() {
 		});
 	});
 });
+
+describe('Git error', function() {
+	var state = {};
+	before(function() {
+		return git(['symbolic-ref', 'NULL'], {cwd: suite.cwd})
+			.oneline({silenceErrors: true})
+			.catch(function(err) {
+				state.err = err;
+			});
+	});
+
+	it('should have the GITERROR code', function() {
+		expect(state.err.code)
+			.to.be.a('string')
+			.and.to.equal('GITERROR');
+	});
+
+	it('should expose the exit code as exitCode', function() {
+		expect(state.err.exitCode)
+			.to.be.a('number')
+			.and.to.equal(128);
+	});
+});
